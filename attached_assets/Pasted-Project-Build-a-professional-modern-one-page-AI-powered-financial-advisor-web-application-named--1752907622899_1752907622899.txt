@@ -1,0 +1,77 @@
+Project: Build a professional, modern, one-page AI-powered financial advisor web application named "Explorer PM" for the "Insurance for All" initiative.
+
+Requirements:
+Technology Stack:
+
+Frontend: HTML, CSS (TailwindCSS or non-default modern theme/colors), JavaScript
+
+Backend: Node.js (Express)
+
+ML: Integrate my supplied fullcode.py for ML predictions (launch via API)
+
+Charts: Use Chart.js for interactive visualizations
+
+Project Structure:
+text
+/public
+  index.html
+  style.css
+  main.js
+server.js          # Node.js backend that exposes a /predict endpoint and invokes fullcode.py
+package.json
+README.md
+fullcode.py        # I will provide this file; do not implement or overwrite it
+Features:
+Frontend (Single Page App):
+
+Attractive, non-cliché color palette (not blue/white), modern UI using Tailwind, Bulma, or Materialize.
+
+Nav-tabs for Dashboard, Expenses, Investments, Insurance, Goals, and Reports (single-page, no reloads).
+
+User input form for all core financial fields (income, expenses, assets, savings, investments, debt, insurance, and goals).
+
+After submit, show dynamic cards with metrics and actionable ML-powered recommendations from backend.
+
+Interactive data visualizations: Pie, Bar, and Line charts for financial breakdowns (via Chart.js).
+
+Allow users to download/export their analysis as PDF and CSV (client-side).
+
+Use sessionStorage or localStorage to store all user data and outputs in the browser (no accounts needed).
+
+All calculations and analysis (except for ML predictions) handled client-side.
+
+Backend:
+
+Node.js Express server, single /predict HTTP POST endpoint.
+
+Receives user data, relays to fullcode.py (via child_process Python invocation), and responds with predictions as JSON.
+
+Do not require auth, sessions, or a database.
+
+Integration & Testing:
+
+Ensure the full ML pipeline is integrated: user submits details → backend calls Python ML → returns and displays recommendations.
+
+Test all main flows with realistic user data.
+
+Deployment:
+
+The app must run instantly on Replit.
+
+package.json includes all dependencies (express, cors, child_process, etc).
+
+README.md includes step-by-step setup (on Replit/web), usage guide, and API contract.
+
+Delivery:
+
+Generate complete, ready-to-run code for all files except fullcode.py.
+
+Do not generate, overwrite, or stub out fullcode.py—I will supply this and it contains the ML code.
+
+Style should look clean, colorful, modern, and appealing—avoid finance app clichés.
+
+All routes, file locations, and API names must match those specified above.
+
+End goal:
+A finished, modern financial advisor SPA, integrated with my ML backend, deployable on Replit out-of-the-box.
+Give me all code for all files you generate.
