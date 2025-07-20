@@ -1,33 +1,18 @@
-# Python
 venv/
+node_modules/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Node.js
-node_modules/
 dist/
 build/
-
-# Environment
 .env
 .env.*
-
-# OS
 .DS_Store
 Thumbs.db
-
-# Logs
 *.log
-
-# Misc
 *.sqlite3
 *.db
 *.bak
-
-# VSCode
 .vscode/
-
-# Jupyter
 .ipynb_checkpoints/
