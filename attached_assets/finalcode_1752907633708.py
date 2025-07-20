@@ -881,6 +881,152 @@ class ExplorerPM:
         except:
             return "Unable to analyze investment behavior"
 
+# Add these utility functions at the bottom of the file or in the ExplorerPM class as needed
+
+def classify_expenses(data):
+    fixed_categories = ['Rent/Mortgage', 'Utilities', 'Insurance', 'Car Payment', 'Debt Payments']
+    variable_categories = ['Groceries', 'Clothes', 'Phone', 'Subscriptions', 'Miscellaneous', 'Vacations', 'Gifts', 'Dining out', 'Movies', 'Other']
+    fixed_expenses = {k: v for k, v in data.items() if k in fixed_categories}
+    variable_expenses = {k: v for k, v in data.items() if k in variable_categories}
+    return fixed_expenses, variable_expenses
+
+def predict_future_liabilities(data):
+    future_liabilities = []
+    if data.get('Car Payment', 0) > 0:
+        future_liabilities.append({"type": "Car EMI", "amount": data['Car Payment'], "due_date": "next month"})
+    # Add more logic for tuition, medical, etc.
+    return future_liabilities
+
+def detect_anomalies(data):
+    anomalies = []
+    if data.get('Dining out', 0) > 0.3 * data.get('Net monthly income', 1):
+        anomalies.append("High spending on Dining out")
+    # Add more rules or use your model
+    return anomalies
+
+def asset_rebalancing(data):
+    # Use user input for dynamic allocation
+    total_investment = data.get('Investments', 0) + data.get('Savings', 0)
+    equity = data.get('Investments', 0)
+    debt = data.get('Savings', 0)
+    current_allocation = {
+        "equity": round(100 * equity / total_investment, 1) if total_investment else 0,
+        "debt": round(100 * debt / total_investment, 1) if total_investment else 0
+    }
+    age = data.get('Age', 30)
+    # Dynamic recommended allocation based on age
+    if age < 35:
+        recommended = {"equity": 80, "debt": 20}
+    elif age < 50:
+        recommended = {"equity": 60, "debt": 40}
+    else:
+        recommended = {"equity": 40, "debt": 60}
+    # SIP/ELSS/PPF suggestions based on surplus
+    net_income = data.get('Net monthly income', 0)
+    expense_sum = sum([v for k, v in data.items() if k in [
+        'Rent/Mortgage', 'Utilities', 'Insurance', 'Car Payment', 'Debt Payments',
+        'Groceries', 'Clothes', 'Phone', 'Subscriptions', 'Miscellaneous',
+        'Vacations', 'Gifts', 'Emergency Fund', 'Dining out', 'Movies', 'Other']])
+    monthly_surplus = net_income - expense_sum
+    sip = int(monthly_surplus * 0.5) if monthly_surplus > 0 else 0
+    elss = int(monthly_surplus * 0.2) if monthly_surplus > 0 else 0
+    ppf = int(monthly_surplus * 0.1) if monthly_surplus > 0 else 0
+    # Risk profile
+    if age < 30:
+        risk_profile = "Aggressive"
+    elif age < 50:
+        risk_profile = "Moderate"
+    else:
+        risk_profile = "Conservative"
+    return {
+        "risk_profile": risk_profile,
+        "sip": sip,
+        "elss": elss,
+        "ppf": ppf,
+        "asset_allocation": current_allocation,
+        "recommended_allocation": recommended
+    }
+
+def health_critical_risk(data):
+    # Dynamic health/critical illness risk based on age and debt
+    age = data.get('Age', 30)
+    debt = data.get('Debt', 0)
+    health_risk_score = min(100, max(10, int((age - 18) * 1.5 + (debt / 100000) * 10)))
+    critical_illness_score = min(100, max(5, int((age - 18) * 1.2 + (debt / 200000) * 10)))
+    # Insurance gap
+    current_life = data.get('Insurance', 0)
+    net_income = data.get('Net monthly income', 0)
+    recommended_life = net_income * 12 * 10 if net_income > 0 else 0
+    gap = max(0, recommended_life - current_life)
+    return {
+        "current_life": current_life,
+        "recommended_life": recommended_life,
+        "gap": gap,
+        "health_risk_score": health_risk_score,
+        "critical_illness_score": critical_illness_score
+    }
+
+def gauges_data(data):
+    # Dynamic gauges based on user input
+    net_income = data.get('Net monthly income', 0)
+    expense_sum = sum([v for k, v in data.items() if k in [
+        'Rent/Mortgage', 'Utilities', 'Insurance', 'Car Payment', 'Debt Payments',
+        'Groceries', 'Clothes', 'Phone', 'Subscriptions', 'Miscellaneous',
+        'Vacations', 'Gifts', 'Emergency Fund', 'Dining out', 'Movies', 'Other']])
+    savings = data.get('Savings', 0)
+    debt = data.get('Debt', 0)
+    # Risk: higher if debt is high
+    risk = min(100, max(10, int((debt / (net_income * 12 + 1)) * 100))) if net_income > 0 else 50
+    # Health: higher if savings are high
+    health = min(100, max(10, int((savings / (expense_sum + 1)) * 100))) if expense_sum > 0 else 50
+    # Savings rate
+    savings_rate = int(((net_income - expense_sum) / net_income) * 100) if net_income > 0 else 0
+    return {"risk": risk, "health": health, "savings_rate": savings_rate}
+
+def category_table_data(data):
+    # Dynamic summary table
+    expense_sum = sum([v for k, v in data.items() if k in [
+        'Rent/Mortgage', 'Utilities', 'Insurance', 'Car Payment', 'Debt Payments',
+        'Groceries', 'Clothes', 'Phone', 'Subscriptions', 'Miscellaneous',
+        'Vacations', 'Gifts', 'Emergency Fund', 'Dining out', 'Movies', 'Other']])
+    net_income = data.get('Net monthly income', 0)
+    insurance = data.get('Insurance', 0)
+    recommended_life = net_income * 12 * 10 if net_income > 0 else 0
+    gap = max(0, recommended_life - insurance)
+    return [
+        {"category": "Expense Pattern", "current": f"{int(100 * expense_sum / (net_income + 1))}% on lifestyle", "recommended": "Reduce to 30%"},
+        {"category": "Insurance Cover", "current": f"₹{insurance/100000:.0f}L Life", "recommended": f"Need ₹{recommended_life/100000:.0f}L Life"},
+        {"category": "Gap", "current": f"₹{gap:,.0f}", "recommended": "Close the gap with more coverage"}
+    ]
+
+def projections_and_events(data):
+    net_worth = data.get('Assets', 0) + data.get('Investments', 0) + data.get('Savings', 0) - data.get('Debt', 0)
+    projections = [
+        {"year": 2025, "net_worth": int(net_worth * 1.08)},
+        {"year": 2027, "net_worth": int(net_worth * 1.08**3)},
+        {"year": 2034, "net_worth": int(net_worth * 1.08**10)},
+    ]
+    events = []
+    if data.get('Savings', 0) < data.get('Net monthly income', 1) * 6:
+        events.append({"year": 2025, "event": "Fund Shortage"})
+    return projections, events
+
+def sankey_data(data, fixed_expenses, variable_expenses):
+    sankey = {
+        "nodes": [
+            {"name": "Income"},
+            {"name": "Expenses"},
+            {"name": "Investments"},
+            {"name": "Insurance"}
+        ],
+        "links": [
+            {"source": 0, "target": 1, "value": sum(fixed_expenses.values()) + sum(variable_expenses.values())},
+            {"source": 0, "target": 2, "value": data.get('Investments', 0)},
+            {"source": 0, "target": 3, "value": data.get('Insurance', 0)}
+        ]
+    }
+    return sankey
+
 # Main execution function
 def main():
     """Main execution function with comprehensive error handling"""

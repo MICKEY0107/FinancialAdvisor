@@ -214,11 +214,12 @@ export function GoalProgressChart({ data }: { data: FinancialData }) {
     // Sample goal data based on user's information
     const emergencyFundTarget = data.netIncome * 6;
     const emergencyFundProgress = Math.min(100, (data.savings / emergencyFundTarget) * 100);
-    
-    const houseDownPaymentTarget = 100000;
+    // Make house down payment target dynamic (e.g., 20% of a typical house value in India, or based on user input if available)
+    const typicalHouseValue = 5000000; // Example: 50 lakh INR
+    const houseDownPaymentTarget = typicalHouseValue * 0.2; // 20% down payment
     const houseDownPaymentProgress = Math.min(100, (data.savings * 0.6 / houseDownPaymentTarget) * 100);
-    
-    const retirementTarget = data.grossIncome * 12 * 10;
+    // Make retirement target dynamic (e.g., 20x annual income)
+    const retirementTarget = data.grossIncome * 12 * 20; // 20 years of annual income
     const retirementProgress = Math.min(100, (data.investments / retirementTarget) * 100);
 
     const chart = new window.Chart(ctx, {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { pgTable, uuid, varchar, timestamp } from 'drizzle-orm/pg-core';
 
 export const financialDataSchema = z.object({
   // Personal Information

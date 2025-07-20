@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { financialDataSchema, type FinancialData } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { Slider } from "@/components/ui/slider";
 
 interface FinancialModalProps {
   isOpen: boolean;
@@ -92,18 +93,30 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                     <FormItem>
                       <FormLabel>Age</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="30"
-                          {...field}
-                          onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                          className="explorer-input"
-                        />
+                        <div className="flex items-center gap-4">
+                          <Slider
+                            min={18}
+                            max={100}
+                            step={1}
+                            value={[field.value ?? 0]}
+                            onValueChange={([val]) => field.onChange(val)}
+                            className="w-40"
+                          />
+                          <Input
+                            type="number"
+                            min={18}
+                            max={100}
+                            value={field.value}
+                            onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                            className="explorer-input w-20"
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {/* --- OCCUPATION FIELD --- */}
                 <FormField
                   control={form.control}
                   name="occupation"
@@ -111,7 +124,30 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                     <FormItem>
                       <FormLabel>Occupation</FormLabel>
                       <FormControl>
-                        <Input placeholder="Software Engineer" {...field} className="explorer-input" />
+                        <div className="flex gap-2 items-center">
+                          <Select
+                            value={field.value && ["Software Engineer","Doctor","Teacher","Business","Other"].includes(field.value) ? field.value : ""}
+                            onValueChange={val => field.onChange(val)}
+                          >
+                            <SelectTrigger className="explorer-input w-64">
+                              <SelectValue placeholder="Select occupation" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Software Engineer">Software Engineer</SelectItem>
+                              <SelectItem value="Doctor">Doctor</SelectItem>
+                              <SelectItem value="Teacher">Teacher</SelectItem>
+                              <SelectItem value="Business">Business</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <span className="text-gray-400">or</span>
+                          <Input
+                            placeholder="Custom occupation"
+                            value={field.value && !["Software Engineer","Doctor","Teacher","Business","Other"].includes(field.value) ? field.value : ""}
+                            onChange={e => field.onChange(e.target.value)}
+                            className="explorer-input w-64"
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -132,14 +168,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Gross Monthly Income</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="8000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={300000}
+                              step={100}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="8000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -154,14 +201,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Net Monthly Income</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="6000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={300000}
+                              step={100}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="6000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -183,14 +241,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Total Assets</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="50000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={20000000}
+                              step={1000}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="50000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -205,14 +274,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Savings</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="20000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={20000000}
+                              step={1000}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="20000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -227,14 +307,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Investments</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="15000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={20000000}
+                              step={1000}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="15000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -256,14 +347,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Total Debt</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="5000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={20000000}
+                              step={1000}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="5000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -278,14 +380,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Monthly Debt Payments</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="200"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={200000}
+                              step={100}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="200"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -307,14 +420,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Housing</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="1500"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={100}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="1500"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -329,14 +453,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Transportation</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="400"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={50}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="400"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -351,14 +486,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Food & Dining</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="500"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={50}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="500"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -373,14 +519,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Utilities</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="150"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={50}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="150"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -395,14 +552,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Entertainment</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="200"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={50}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="200"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -417,14 +585,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Healthcare</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="300"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={100000}
+                              step={50}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="300"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -446,14 +625,25 @@ export function FinancialModal({ isOpen, onClose, onSubmit, isLoading = false }:
                       <FormLabel>Life Insurance Coverage</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <span className="absolute left-3 top-3 text-gray-400">$</span>
-                          <Input
-                            type="number"
-                            placeholder="100000"
-                            className="pl-8 explorer-input"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
+                          <span className="absolute left-3 top-3 text-gray-400">₹</span>
+                          <div className="flex items-center gap-4 w-full max-w-xl">
+                            <Slider
+                              min={0}
+                              max={20000000}
+                              step={10000}
+                              value={[field.value ?? 0]}
+                              onValueChange={([val]) => field.onChange(val)}
+                              className="w-72"
+                            />
+                            <span className="font-mono text-xs text-gray-500 w-32 text-right">₹{field.value?.toLocaleString()}</span>
+                            <Input
+                              type="number"
+                              placeholder="100000"
+                              className="pl-8 explorer-input w-32"
+                              {...field}
+                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage />

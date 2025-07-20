@@ -80,19 +80,38 @@ export function generateRecommendations(data: FinancialData, metrics: FinancialM
     const gap = recommendedLifeInsurance - data.lifeInsurance;
     recommendations.push({
       title: 'Increase Life Insurance',
-      description: `Consider increasing life insurance by $${gap.toLocaleString()} to cover 10x annual income.`,
+      description: `Consider increasing life insurance by ${formatCurrency(gap)} to cover 10x annual income.`,
       priority: 'Medium' as const,
       category: 'Insurance'
     });
+  }
+
+  // 50-30-20 rule recommendation
+  const needs = (data.housing || 0) + (data.utilities || 0) + (data.food || 0) + (data.healthcare || 0);
+  const wants = (data.entertainment || 0) + (data.transportation || 0) + (data.other || 0);
+  const savings = data.savings;
+  const income = data.netIncome;
+  if (income > 0) {
+    const needsPct = (needs / income) * 100;
+    const wantsPct = (wants / income) * 100;
+    const savingsPct = (savings / income) * 100;
+    if (needsPct > 50 || wantsPct > 30 || savingsPct < 20) {
+      recommendations.push({
+        title: 'Follow the 50-30-20 Rule',
+        description: `Aim to spend ~50% of your income on needs, 30% on wants, and save at least 20%. Your current split: Needs: ${needsPct.toFixed(1)}%, Wants: ${wantsPct.toFixed(1)}%, Savings: ${savingsPct.toFixed(1)}%.`,
+        priority: 'Medium' as const,
+        category: 'Budgeting'
+      });
+    }
   }
 
   return recommendations;
 }
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'INR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);

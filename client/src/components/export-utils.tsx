@@ -28,7 +28,7 @@ export function exportToPDF(data: FinancialData, metrics: FinancialMetrics, reco
 
   // Financial Summary
   doc.setFontSize(16);
-  doc.text('Financial Summary', 20, 50);
+  doc.text('Financial Summary (All values in ₹)', 20, 50);
   
   const summaryData = [
     [`Net Worth`, formatCurrency(metrics.netWorth)],
@@ -83,16 +83,16 @@ export function exportToCSV(data: FinancialData, metrics: FinancialMetrics) {
     ['Metric', 'Value'],
     ['Age', data.age.toString()],
     ['Occupation', data.occupation],
-    ['Gross Monthly Income', data.grossIncome.toString()],
-    ['Net Monthly Income', data.netIncome.toString()],
-    ['Total Assets', data.assets.toString()],
-    ['Savings', data.savings.toString()],
-    ['Investments', data.investments.toString()],
-    ['Total Debt', data.debt.toString()],
-    ['Monthly Debt Payments', data.monthlyDebtPayments.toString()],
-    ['Life Insurance', data.lifeInsurance.toString()],
+    ['Gross Monthly Income (₹)', data.grossIncome.toString()],
+    ['Net Monthly Income (₹)', data.netIncome.toString()],
+    ['Total Assets (₹)', data.assets.toString()],
+    ['Savings (₹)', data.savings.toString()],
+    ['Investments (₹)', data.investments.toString()],
+    ['Total Debt (₹)', data.debt.toString()],
+    ['Monthly Debt Payments (₹)', data.monthlyDebtPayments.toString()],
+    ['Life Insurance (₹)', data.lifeInsurance.toString()],
     ['Goals Priority', data.goalsPriority],
-    ['Net Worth', metrics.netWorth.toString()],
+    ['Net Worth (₹)', metrics.netWorth.toString()],
     ['Debt-to-Income Ratio (%)', metrics.debtToIncomeRatio.toFixed(2)],
     ['Savings Rate (%)', metrics.savingsRate.toFixed(2)],
     ['Emergency Fund (Months)', metrics.emergencyFundMonths.toFixed(2)],
