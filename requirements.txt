@@ -1,10 +1,10 @@
-flask
-flask_cors
 pandas
 numpy
 scikit-learn
 xgboost
 lightgbm
-matplotlib
 prophet
-joblib 
+matplotlib
+joblib
+flask
+flask-cors 
