@@ -7,4 +7,5 @@ prophet
 matplotlib
 joblib
 flask
-flask-cors 
+flask-cors
+gunicorn 

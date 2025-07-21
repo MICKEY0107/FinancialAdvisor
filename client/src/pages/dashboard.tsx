@@ -79,7 +79,7 @@ export default function Dashboard() {
   });
 
   async function fetchSmartReport(profileData: any) {
-    const res = await fetch('http://localhost:5000/api/smart-report', {
+    const res = await fetch('https://financialadvisor-pbcd.onrender.com/api/smart-report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(profileData),
@@ -157,7 +157,7 @@ export default function Dashboard() {
     setLoadingSmart(true);
     setErrorSmart(null);
     try {
-      const res = await fetch('http://localhost:5000/api/smart-report', {
+      const res = await fetch('https://financialadvisor-pbcd.onrender.com/api/smart-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profile),
